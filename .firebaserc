@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "purchasing-4d698"
+  },
+  "targets": {
+    "purchasing-4d698": {
+      "hosting": {
+        "smartlogistics": [
+          "purchasing-4d698"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

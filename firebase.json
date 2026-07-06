@@ -1,0 +1,64 @@
+{
+  "hosting": [
+    {
+      "target": "smartlogistics",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "cleanUrls": false,
+      "rewrites": [
+        {
+          "source": "/",
+          "destination": "/index.html"
+        },
+        {
+          "source": "/login",
+          "destination": "/login.html"
+        },
+        {
+          "source": "/transportation",
+          "destination": "/transportation.html"
+        },
+        {
+          "source": "/landing",
+          "destination": "/landing.html"
+        },
+        {
+          "source": "/master",
+          "destination": "/master.html"
+        },
+        {
+          "source": "/driver",
+          "destination": "/driver.html"
+        },
+        {
+          "source": "/accountant",
+          "destination": "/accountant.html"
+        },
+        {
+          "source": "/performance",
+          "destination": "/performance.html"
+        },
+        {
+          "source": "/overview",
+          "destination": "/overview.html"
+        },
+        {
+          "source": "/maintenance",
+          "destination": "/maintenance.html"
+        },
+        {
+          "source": "/fuel",
+          "destination": "/fuel.html"
+        },
+        {
+          "source": "/users",
+          "destination": "/users.html"
+        }
+      ]
+    }
+  ]
+}

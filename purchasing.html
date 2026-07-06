@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🛒 Purchasing / Procurement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<style>
+:root {
+  --navy:   #0d2248;
+  --blue:   #1a3a8f;
+  --accent: #1d6ef5;
+  --green:  #0d9f6e;
+  --red:    #e03131;
+  --amber:  #e67700;
+  --purple: #7c3aed;
+  --cyan:   #0891b2;
+  --border: #e2e8f5;
+  --muted:  #64748b;
+  --bg:     #eef1f8;
+  --white:  #ffffff;
+  --text:   #0f172a;
+  --alt:    #f7f9ff;
+  --shadow: 0 1px 3px rgba(13,34,72,.08), 0 1px 2px rgba(13,34,72,.04);
+  --r:      6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Be Vietnam Pro','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:13px;min-height:100vh;overflow-x:hidden;}
+
+/* ── NAV ── */
+.nav{background:var(--navy);display:flex;align-items:center;padding:0 18px;height:46px;gap:2px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(13,34,72,.3);}
+.nav a{color:rgba(255,255,255,.6);text-decoration:none;font-size:12.5px;font-weight:500;padding:5px 12px;border-radius:5px;transition:.15s;white-space:nowrap;}
+.nav a:hover{background:rgba(255,255,255,.1);color:#fff;}
+.nav a.active{background:rgba(29,110,245,.5);color:#fff;font-weight:600;}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.nav-user{color:rgba(255,255,255,.75);font-size:12px;font-weight:500;}
+.btn-logout{background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15);border-radius:5px;padding:4px 11px;font-size:12px;font-family:inherit;cursor:pointer;transition:.15s;}
+.btn-logout:hover{background:rgba(255,255,255,.2);color:#fff;}
+
+/* ── TOOLBAR ── */
+.toolbar{background:var(--white);border-bottom:1px solid var(--border);padding:8px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.toolbar-title{font-size:13px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:8px;letter-spacing:.01em;}
+.toolbar-title::before{content:'';width:3px;height:15px;background:var(--accent);border-radius:2px;display:inline-block;}
+.btn-row{display:flex;gap:5px;flex-wrap:wrap;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border:none;border-radius:5px;font-size:12px;font-family:inherit;font-weight:600;cursor:pointer;transition:.15s;white-space:nowrap;line-height:1.4;}
+.btn:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 3px 8px rgba(0,0,0,.12);}
+.btn:active{transform:translateY(0);}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;filter:none;box-shadow:none;}
+.btn-save   {background:var(--accent);color:#fff;}
+.btn-new    {background:var(--green);color:#fff;}
+.btn-cancel {background:#f1f5f9;color:#475569;border:1px solid var(--border);}
+.btn-excel  {background:#f1f5f9;color:#475569;border:1px solid var(--border);}
+.btn-master {background:#eff6ff;color:#1d6ef5;border:1px solid #bfdbfe;}
+.btn-cfg    {background:#faf5ff;color:#7c3aed;border:1px solid #e9d5ff;}
+.btn-sm     {padding:3px 9px;font-size:11.5px;}
+.btn-edit   {background:#fef9c3;color:#854d0e;border:1px solid #fde047;}
+.btn-del    {background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;}
+.btn-view   {background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;}
+.btn-approve{background:#dcfce7;color:#166534;border:1px solid #86efac;}
+.btn-reject {background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;}
+.btn-po     {background:#ede9fe;color:#5b21b6;border:1px solid #ddd6fe;}
+.btn-receipt{background:#cffafe;color:#155e75;border:1px solid #67e8f9;}
+.btn-invoice{background:#ffedd5;color:#9a3412;border:1px solid #fdba74;}
+.btn-close  {background:#dcfce7;color:#14532d;border:1px solid #86efac;}
+
+/* ── FORM CARD ── */
+.form-card{background:var(--white);margin:12px 16px 0;border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow);}
+.form-inner{padding:12px 14px 8px;}
+
+/* ── SECTION LABEL ── */
+.sec{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.sec-line{flex:1;height:1px;background:var(--border);}
+.sec-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;padding:0 4px;}
+
+.row{display:grid;gap:7px;margin-bottom:7px;}
+.row-r1{ grid-template-columns: repeat(5, 1fr); }
+.row-r2{ grid-template-columns: repeat(4, 1fr); }
+
+.field{display:flex;flex-direction:column;gap:2px;}
+.lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+
+input,select,textarea{height:28px;font-size:12px;font-family:'Be Vietnam Pro','Segoe UI',Arial,sans-serif;border:1px solid var(--border);border-radius:5px;padding:0 7px;background:var(--white);color:var(--text);transition:border .15s,box-shadow .15s;width:100%;}
+textarea{height:56px;padding:6px 7px;resize:vertical;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,110,245,.1);}
+input[readonly]{background:#f8fafc;color:var(--muted);cursor:default;}
+input[type="file"]{height:auto;padding:4px 6px;font-size:11.5px;cursor:pointer;}
+input[type="number"]{text-align:right;}
+input::placeholder{color:#cbd5e1;}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 14px;border-top:1px solid var(--border);background:#fafbff;border-radius:0 0 var(--r) var(--r);flex-wrap:wrap;}
+.filter-l{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.filter-r{display:flex;gap:12px;align-items:center;}
+.filter-bar input[type="text"]{width:190px;height:28px;font-size:12px;}
+.filter-bar input[type="date"]{width:128px;height:28px;font-size:12px;}
+.pill{background:var(--alt);color:var(--navy);border:1px solid #c7d4f0;border-radius:20px;padding:3px 14px;font-size:12px;font-weight:600;}
+.pill strong{color:var(--accent);}
+
+/* ── STATUS TABS ── */
+.status-tabs{display:flex;gap:6px;padding:10px 16px 0;flex-wrap:wrap;}
+.stab{border:1px solid var(--border);background:var(--white);color:var(--muted);padding:5px 13px;border-radius:20px;font-size:11.5px;font-weight:600;cursor:pointer;transition:.15s;white-space:nowrap;}
+.stab:hover{border-color:var(--accent);color:var(--accent);}
+.stab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.stab .cnt{opacity:.75;font-weight:700;margin-left:4px;}
+
+/* ── WARN BANNER ── */
+.warn-banner{background:#fffbeb;border-bottom:1px solid #fde68a;color:#92400e;padding:8px 18px;font-size:12.5px;font-weight:500;text-align:center;}
+.warn-banner a{color:var(--accent);font-weight:700;cursor:pointer;}
+
+/* ── TABLE ── */
+.tbl-wrap{margin:10px 16px 16px;background:var(--white);border-radius:var(--r);border:1px solid var(--border);overflow-x:auto;overflow-y:visible;box-shadow:var(--shadow);max-width:100%;}
+table{border-collapse:collapse;width:100%;font-size:12px;}
+thead th{background:var(--navy);color:rgba(255,255,255,.88);padding:7px 8px;font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;position:sticky;top:0;z-index:5;}
+td{border-bottom:1px solid var(--border);padding:6px 8px;text-align:center;color:var(--text);font-size:12px;}
+td.tl{text-align:left;}
+td.tr{text-align:right;}
+tr:last-child td{border-bottom:none;}
+tr:nth-child(even) td{background:var(--alt);}
+tr:hover td{background:#e8eeff!important;}
+
+/* ── STATUS BADGES ── */
+.badge{display:inline-block;border-radius:20px;padding:2px 10px;font-size:10.5px;font-weight:700;white-space:nowrap;}
+.badge-draft     {background:#f1f5f9;color:#475569;}
+.badge-pending   {background:#fef3c7;color:#92400e;}
+.badge-approved  {background:#dbeafe;color:#1e40af;}
+.badge-rejected  {background:#fee2e2;color:#991b1b;}
+.badge-po        {background:#ede9fe;color:#5b21b6;}
+.badge-receiving {background:#cffafe;color:#155e75;}
+.badge-received  {background:#d1fae5;color:#065f46;}
+.badge-invoicing {background:#ffedd5;color:#9a3412;}
+.badge-matched   {background:#dcfce7;color:#166534;}
+.badge-mismatch  {background:#fee2e2;color:#991b1b;}
+.badge-closed    {background:#052e16;color:#bbf7d0;}
+
+/* ── MINI STEPPER (table row) ── */
+.mstep{display:inline-flex;align-items:center;gap:2px;}
+.mstep i{width:8px;height:8px;border-radius:50%;background:#e2e8f0;display:inline-block;}
+.mstep i.done{background:var(--green);}
+.mstep i.now{background:var(--amber);box-shadow:0 0 0 3px rgba(230,119,0,.18);}
+.mstep i.bad{background:var(--red);}
+
+/* ── FULL STEPPER (modal) ── */
+.stepper-full{display:flex;align-items:flex-start;justify-content:space-between;padding:18px 10px 6px;gap:0;}
+.step-item{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;text-align:center;}
+.step-item::before{content:'';position:absolute;top:15px;left:-50%;width:100%;height:2px;background:var(--border);z-index:0;}
+.step-item:first-child::before{display:none;}
+.step-item.done::before{background:var(--green);}
+.step-circle{width:32px;height:32px;border-radius:50%;background:var(--white);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--muted);z-index:1;position:relative;}
+.step-item.done .step-circle{background:var(--green);border-color:var(--green);color:#fff;}
+.step-item.now .step-circle{background:var(--amber);border-color:var(--amber);color:#fff;animation:pulseWarn 1.6s infinite;}
+.step-item.bad .step-circle{background:var(--red);border-color:var(--red);color:#fff;}
+.step-label{font-size:10.5px;font-weight:700;color:var(--navy);margin-top:6px;max-width:90px;line-height:1.3;}
+.step-sub{font-size:9.5px;color:var(--muted);margin-top:2px;max-width:100px;line-height:1.3;}
+
+/* ── APPROVAL LEVELS LIST (modal) ── */
+.appr-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.appr-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--alt);}
+.appr-row.ok{border-color:#86efac;background:#f0fdf4;}
+.appr-row.no{border-color:#fca5a5;background:#fef2f2;}
+.appr-row.wait{border-color:#fcd34d;background:#fffbeb;}
+.appr-badge{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;background:#e2e8f0;color:var(--muted);flex-shrink:0;}
+.appr-row.ok .appr-badge{background:var(--green);color:#fff;}
+.appr-row.no .appr-badge{background:var(--red);color:#fff;}
+.appr-row.wait .appr-badge{background:var(--amber);color:#fff;}
+.appr-info{flex:1;}
+.appr-title{font-size:12px;font-weight:700;color:var(--navy);}
+.appr-meta{font-size:11px;color:var(--muted);margin-top:1px;}
+.appr-comment{font-size:11px;color:var(--text);margin-top:3px;font-style:italic;}
+
+/* ── LINE ITEMS TABLE (form) ── */
+.line-tbl-wrap{margin-top:6px;border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+.line-tbl{width:100%;border-collapse:collapse;font-size:11.5px;}
+.line-tbl th{background:#f1f5f9;color:var(--navy);padding:6px 6px;font-size:10px;text-transform:uppercase;letter-spacing:.03em;font-weight:700;}
+.line-tbl td{padding:4px;border-top:1px solid var(--border);}
+.line-tbl input,.line-tbl select{height:26px;font-size:11.5px;}
+.line-tbl .rm{background:#fee2e2;color:#991b1b;border:none;border-radius:4px;width:24px;height:24px;cursor:pointer;font-weight:700;}
+.line-tbl .quote-btn{background:#f1f5f9;color:#64748b;border:1px solid var(--border);border-radius:4px;width:100%;height:26px;cursor:pointer;font-size:12px;}
+.line-tbl .quote-btn.has-link{background:#eff6ff;color:#1d6ef5;border-color:#bfdbfe;font-weight:700;}
+.line-total-bar{display:flex;justify-content:flex-end;align-items:center;gap:10px;padding:8px 4px 2px;font-size:13px;font-weight:700;color:var(--navy);}
+.line-total-bar span{color:var(--accent);font-size:15px;}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(13,20,40,.55);display:none;align-items:flex-start;justify-content:center;z-index:1000;padding:24px 12px;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal-panel{background:var(--white);border-radius:10px;width:100%;max-width:980px;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:modalIn .18s ease;}
+.modal-panel.narrow{max-width:640px;}
+@keyframes modalIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);}
+.modal-header h3{font-size:15px;color:var(--navy);font-weight:700;}
+.modal-close{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;line-height:1;}
+.modal-body{padding:16px 18px;max-height:74vh;overflow-y:auto;}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px;border-top:1px solid var(--border);flex-wrap:wrap;}
+
+/* ── TABS (inside modal) ── */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:12px;flex-wrap:wrap;}
+.tab-btn{background:none;border:none;padding:8px 14px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-family:inherit;}
+.tab-btn.active{color:var(--accent);border-color:var(--accent);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── MASTER DATA MINI TABLE ── */
+.mini-tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:8px;}
+.mini-tbl th{background:#f1f5f9;color:var(--navy);padding:6px;font-size:10px;text-transform:uppercase;font-weight:700;text-align:left;}
+.mini-tbl td{padding:5px 6px;border-top:1px solid var(--border);}
+.mini-actions{display:flex;gap:4px;}
+
+.import-drop{border:2px dashed #bfdbfe;border-radius:8px;padding:16px;text-align:center;background:#f8faff;margin-bottom:10px;}
+.import-drop p{font-size:11.5px;color:var(--muted);margin-top:6px;}
+
+.note-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:8px 12px;font-size:11.5px;color:#1e3a8a;margin-bottom:10px;}
+.mismatch-box{background:#fef2f2;border:1px solid #fca5a5;border-radius:6px;padding:8px 12px;font-size:11.5px;color:#991b1b;margin-top:8px;}
+.match-box{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:8px 12px;font-size:11.5px;color:#166534;margin-top:8px;}
+
+@keyframes pulseWarn{0%,100%{opacity:1;}50%{opacity:.6;}}
+</style>
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+  import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query, orderBy, where, limit, getDocs }
+    from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+  import { getDatabase, ref, onValue, get, set }
+    from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+  window.__fbApp  = { initializeApp };
+  window.__fbFS   = { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query, orderBy, where, limit, getDocs };
+  window.__fbRTDB = { getDatabase, ref, onValue, get, set };
+  window.__fbReady = true;
+  if (window.__fbReadyCb) window.__fbReadyCb();
+</script>
+<!-- app-config: APP_ID + module filter — đặt SAU Firebase SDK -->
+<script src="app-config.js?v=3"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+</head>
+<body>
+
+<!-- ✅ GUARD + NAV ĐỘNG — giữ nguyên như bản gốc, chỉ đổi nhãn trang hiện tại -->
+<script>
+(function() {
+  const CURRENT_KEY = "LOGIN_USER";
+  const THIS_PAGE   = "purchasing.html";
+
+  /* 1. Guard */
+  const raw = localStorage.getItem(CURRENT_KEY);
+  const app2=new URLSearchParams(location.search).get("app")||"";const sep2=app2?"?app="+app2:"";if (!raw) { location.href="login.html"+sep2; return; }
+  const session = JSON.parse(raw);
+  if (session.role !== "admin" && session.role !== "viceadmin" && !(session.pages || []).includes(THIS_PAGE)) {
+    location.href=((session.pages&&session.pages[0])||"login.html")+sep2;
+    return;
+  }
+  window.__session = session;
+
+  /* 2. Build nav theo quyền */
+  const ALL_NAV = [
+    { page: "index.html",       label: "🏠 Dashboard" },
+    { page: "transportation.html", label: "🚚 Kế hoạch VC" },
+    { page: "purchasing.html",  label: "🛒 Mua hàng" },
+    { page: "accountant.html",  label: "📒 Kế toán" },
+    { page: "performance.html", label: "📈 Hiệu suất" },
+    { page: "overview.html",    label: "📊 Tổng quan" },
+    { page: "maintenance.html", label: "🔧 Bảo dưỡng",  adminOnly: true },
+    {page:"fuel.html",          label: "⛽ Nhiên liệu",  adminOnly:true},
+    {page:"master.html",        label: "📂 Dữ liệu gốc",      adminOnly:true},
+    { page: "depot.html",       label: "🏗 Depot" },
+    { page: "ware.html",        label: "📦 Kho Ware" },
+    { page: "users.html",       label: "👑 Phân quyền",        adminOnly: true },
+    ];
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const nav      = document.getElementById("mainNav");
+    const navRight = nav.querySelector(".nav-right");
+    const curPage  = location.pathname.split("/").pop() || "purchasing.html";
+
+    ALL_NAV.forEach(item => {
+      if (session.role === "admin") { /* hiện */ }
+      else if (session.role === "viceadmin") { /* hiện tất cả */ }
+      else {
+        if (item.adminOnly) return;
+        if (!(session.pages || []).includes(item.page)) return;
+      }
+
+      const a = document.createElement("a");
+      a.href = item.page;
+      a.textContent = item.label;
+      if (curPage === item.page) a.classList.add("active");
+      const MODULE_MAP = {
+        "index.html":"dashboard","transportation.html":"trucking","purchasing.html":"purchasing","accountant.html":"accountant",
+        "performance.html":"performance","overview.html":"overview",
+        "master.html":"master","maintenance.html":"maintenance",
+        "fuel.html":"fuel","users.html":"users","depot.html":"depot",
+        "ware.html":"ware"
+      };
+      const mod = MODULE_MAP[item.page];
+      if (mod) a.setAttribute("data-module", mod);
+      nav.insertBefore(a, navRight);
+    });
+
+    function applyModuleNav(modules) {
+      nav.querySelectorAll("a[data-module]").forEach(function(a) {
+        const mod = a.getAttribute("data-module");
+        if (modules && modules[mod] === false) a.style.display = "none";
+      });
+    }
+
+    try{
+      const _ck="APP_MODULES_"+(window.APP_ID||sessionStorage.getItem("APP_ID")||"");
+      const _cc=JSON.parse(sessionStorage.getItem(_ck)||"null");
+      if(_cc) applyModuleNav(_cc);
+      else if(window.APP_MODULES) applyModuleNav(window.APP_MODULES);
+    }catch(e){ if(window.APP_MODULES) applyModuleNav(window.APP_MODULES); }
+    window.addEventListener("appModulesLoaded", function(e) {
+      applyModuleNav(e.detail.modules);
+    });
+
+    document.getElementById("userInfo").textContent =
+      `👤 ${session.username} (${session.role})` + (session.approvalRole ? ` · duyệt MH: ${session.approvalRole}` : "");
+
+    document.getElementById("btnLogout").onclick = function() {
+      localStorage.removeItem(CURRENT_KEY);
+      location.href="login.html"+(location.search||"");
+    };
+  });
+})();
+</script>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-right">
+    <span class="nav-user" id="userInfo"></span>
+    <button class="btn-logout" id="btnLogout">↩ Đăng xuất</button>
+  </div>
+</nav>
+
+<!-- WARN BANNER -->
+<div id="warnBanner" class="warn-banner" style="display:none">
+  ⚠️ Chưa có dữ liệu Master (Nhà cung cấp / Vật tư / Kho). Bấm <a onclick="openMasterModal()">📂 Master Data</a> để nhập.
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="toolbar-title">QUẢN LÝ MUA HÀNG (PURCHASING)</div>
+  <div class="btn-row">
+    <button class="btn btn-new"    onclick="openPRModal()">＋ Tạo Yêu cầu mua hàng (PR)</button>
+    <button class="btn btn-master" id="btnMasterData" onclick="openMasterModal()">📂 Master Data</button>
+    <button class="btn btn-cfg" id="btnApprovalCfg"    onclick="openApprovalCfgModal()">⚙️ Cấu hình duyệt</button>
+    <button class="btn btn-excel"  onclick="exportExcel()">↓ Xuất Excel</button>
+  </div>
+</div>
+
+<!-- STATUS TABS -->
+<div class="status-tabs" id="statusTabs"></div>
+
+<!-- FILTER BAR -->
+<div class="form-card" style="margin-top:8px">
+  <div class="filter-bar" style="border-top:none;border-radius:var(--r)">
+    <div class="filter-l">
+      <input type="text" id="searchKeyword" placeholder="🔍 Tìm số PR/PO, người đề xuất, NCC...">
+      <input type="date" id="fromDate">
+      <span style="color:var(--muted);font-size:11px">→</span>
+      <input type="date" id="toDate">
+      <button class="btn btn-save btn-sm" onclick="searchData()">Lọc</button>
+      <button class="btn btn-cancel btn-sm" onclick="clearSearch()">✕ Hủy</button>
+    </div>
+    <div class="filter-r">
+      <div class="pill">Tổng: <strong id="totalQty">0</strong> phiếu</div>
+      <div class="pill">Giá trị: <strong id="totalValueSum">0</strong> đ</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN TABLE -->
+<div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th><th>Số PR</th><th>Ngày tạo</th><th>Người đề xuất</th><th>Phòng ban</th>
+        <th>NCC chính</th><th>Tổng giá trị</th><th>Trạng thái</th><th>Tiến trình</th>
+        <th>Số PO</th><th>Xử lý</th><th>Sửa</th><th>Xóa</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<!-- ============ MODAL: TẠO / SỬA PR ============ -->
+<div class="modal-overlay" id="modalPR">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h3 id="prModalTitle">＋ Tạo Yêu cầu mua hàng (PR)</h3>
+      <button class="modal-close" onclick="closeModal('modalPR')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="prId">
+      <div class="sec"><div class="sec-line"></div><div class="sec-label">Thông tin chung</div><div class="sec-line"></div></div>
+      <div class="row row-r1">
+        <div class="field"><span class="lbl">Ngày đề nghị</span><input id="prDate" type="date"></div>
+        <div class="field"><span class="lbl">Ngày cần hàng</span><input id="neededDate" type="date"></div>
+        <div class="field"><span class="lbl">Người đề xuất</span><input id="requester" placeholder="Họ tên..."></div>
+        <div class="field"><span class="lbl">Phòng ban</span><select id="department"></select></div>
+        <div class="field"><span class="lbl">Mức ưu tiên</span><select id="priority">
+          <option value="normal">Bình thường</option>
+          <option value="urgent">Gấp</option>
+          <option value="critical">Khẩn cấp</option>
+        </select></div>
+      </div>
+
+      <div class="sec" style="margin-top:8px"><div class="sec-line"></div><div class="sec-label">Chi tiết hàng hóa / dịch vụ cần mua</div><div class="sec-line"></div></div>
+      <div class="line-tbl-wrap">
+        <table class="line-tbl">
+          <thead>
+            <tr>
+              <th style="width:14%">Vật tư / Hàng hóa</th>
+              <th style="width:7%">ĐVT</th>
+              <th style="width:6%">SL</th>
+              <th style="width:11%">Đơn giá dự kiến</th>
+              <th style="width:11%">Thành tiền</th>
+              <th style="width:11%">Kho nhận</th>
+              <th style="width:12%">NCC đề xuất</th>
+              <th style="width:11%">Ghi chú dòng</th>
+              <th style="width:7%">Báo giá</th>
+              <th style="width:3%"></th>
+            </tr>
+          </thead>
+          <tbody id="lineBody"></tbody>
+        </table>
+      </div>
+      <button class="btn btn-new btn-sm" style="margin-top:6px" onclick="addLine()">➕ Thêm dòng</button>
+      <div class="line-total-bar">Tổng giá trị dự kiến: <span id="prTotalDisplay">0 đ</span></div>
+
+      <div class="sec" style="margin-top:8px"><div class="sec-line"></div><div class="sec-label">Ghi chú</div><div class="sec-line"></div></div>
+      <textarea id="prNote" placeholder="Ghi chú thêm cho yêu cầu mua hàng..."></textarea>
+
+      <div class="note-box" id="prApprovalPreview" style="margin-top:10px"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal('modalPR')">Đóng</button>
+      <button class="btn btn-save" onclick="savePR(false)">💾 Lưu nháp</button>
+      <button class="btn btn-approve" onclick="savePR(true)">📨 Gửi duyệt</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: CHI TIẾT / XỬ LÝ ============ -->
+<div class="modal-overlay" id="modalDetail">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h3 id="detailTitle">Chi tiết phiếu mua hàng</h3>
+      <button class="modal-close" onclick="closeModal('modalDetail')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="detailStepper" class="stepper-full"></div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tabInfo" onclick="switchTab('tabInfo')">📋 Thông tin</button>
+        <button class="tab-btn" data-tab="tabApproval" onclick="switchTab('tabApproval')">✅ Phê duyệt</button>
+        <button class="tab-btn" data-tab="tabPO" onclick="switchTab('tabPO')">🛒 Đơn hàng (PO)</button>
+        <button class="tab-btn" data-tab="tabReceipt" onclick="switchTab('tabReceipt')">📦 Nhận hàng</button>
+        <button class="tab-btn" data-tab="tabInvoice" onclick="switchTab('tabInvoice')">🧾 Đối chiếu hóa đơn</button>
+      </div>
+
+      <div class="tab-panel active" id="tabInfo"></div>
+      <div class="tab-panel" id="tabApproval"></div>
+      <div class="tab-panel" id="tabPO"></div>
+      <div class="tab-panel" id="tabReceipt"></div>
+      <div class="tab-panel" id="tabInvoice"></div>
+    </div>
+    <div class="modal-footer" id="detailFooter"></div>
+  </div>
+</div>
+
+<!-- ============ MODAL: MASTER DATA ============ -->
+<div class="modal-overlay" id="modalMaster">
+  <div class="modal-panel">
+    <div class="modal-header">
+      <h3>📂 Master Data — Dữ liệu gốc mua hàng</h3>
+      <button class="modal-close" onclick="closeModal('modalMaster')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="tabs">
+        <button class="tab-btn active" data-mtab="mtSup" onclick="switchMTab('mtSup')">🏭 Nhà cung cấp</button>
+        <button class="tab-btn" data-mtab="mtItem" onclick="switchMTab('mtItem')">📦 Vật tư/Hàng hóa</button>
+        <button class="tab-btn" data-mtab="mtWh" onclick="switchMTab('mtWh')">🏬 Kho nhận hàng</button>
+        <button class="tab-btn" data-mtab="mtUnit" onclick="switchMTab('mtUnit')">📏 Đơn vị tính</button>
+        <button class="tab-btn" data-mtab="mtDept" onclick="switchMTab('mtDept')">🏢 Phòng ban</button>
+      </div>
+
+      <div class="import-drop">
+        <div class="btn-row" style="justify-content:center">
+          <button class="btn btn-master btn-sm" onclick="downloadMasterTemplate()">⬇ Tải file mẫu Excel</button>
+          <label class="btn btn-new btn-sm" style="cursor:pointer">📤 Nhập từ Excel<input type="file" accept=".xlsx" style="display:none" onchange="importMasterExcel(this)"></label>
+          <button class="btn btn-excel btn-sm" onclick="exportMasterExcel()">↓ Xuất dữ liệu hiện tại</button>
+        </div>
+        <p>File Excel gồm 5 sheet: <b>NhaCungCap</b>, <b>VatTu</b>, <b>Kho</b>, <b>DonViTinh</b>, <b>PhongBan</b>. Nhập sẽ ghi đè dữ liệu tương ứng theo Mã.</p>
+      </div>
+
+      <div class="tab-panel active" data-mpanel="mtSup">
+        <div class="btn-row"><button class="btn btn-new btn-sm" onclick="addMasterRow('suppliers')">➕ Thêm NCC</button></div>
+        <table class="mini-tbl"><thead><tr><th>Mã NCC</th><th>Tên nhà cung cấp</th><th>MST</th><th>Liên hệ</th><th>SĐT</th><th>Email</th><th>ĐK thanh toán</th><th></th></tr></thead><tbody id="tblSuppliers"></tbody></table>
+      </div>
+      <div class="tab-panel" data-mpanel="mtItem">
+        <div class="btn-row"><button class="btn btn-new btn-sm" onclick="addMasterRow('items')">➕ Thêm vật tư</button></div>
+        <table class="mini-tbl"><thead><tr><th>Mã VT</th><th>Tên vật tư</th><th>ĐVT</th><th>Nhóm hàng</th><th>Đơn giá tham chiếu</th><th>NCC mặc định</th><th></th></tr></thead><tbody id="tblItems"></tbody></table>
+      </div>
+      <div class="tab-panel" data-mpanel="mtWh">
+        <div class="btn-row"><button class="btn btn-new btn-sm" onclick="addMasterRow('warehouses')">➕ Thêm kho</button></div>
+        <table class="mini-tbl"><thead><tr><th>Mã kho</th><th>Tên kho</th><th>Địa chỉ</th><th>Thủ kho</th><th></th></tr></thead><tbody id="tblWarehouses"></tbody></table>
+      </div>
+      <div class="tab-panel" data-mpanel="mtUnit">
+        <div class="btn-row"><button class="btn btn-new btn-sm" onclick="addMasterRow('units')">➕ Thêm ĐVT</button></div>
+        <table class="mini-tbl"><thead><tr><th>Mã ĐVT</th><th>Tên đơn vị tính</th><th></th></tr></thead><tbody id="tblUnits"></tbody></table>
+      </div>
+      <div class="tab-panel" data-mpanel="mtDept">
+        <div class="btn-row"><button class="btn btn-new btn-sm" onclick="addMasterRow('departments')">➕ Thêm phòng ban</button></div>
+        <table class="mini-tbl"><thead><tr><th>Mã phòng ban</th><th>Tên phòng ban</th><th></th></tr></thead><tbody id="tblDepartments"></tbody></table>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal('modalMaster')">Đóng</button>
+      <button class="btn btn-save" onclick="saveMasterData()">💾 Lưu toàn bộ Master Data</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODAL: CẤU HÌNH DUYỆT ============ -->
+<div class="modal-overlay" id="modalApprovalCfg">
+  <div class="modal-panel narrow">
+    <div class="modal-header">
+      <h3>⚙️ Cấu hình bậc thang phê duyệt</h3>
+      <button class="modal-close" onclick="closeModal('modalApprovalCfg')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="note-box">Thiết lập số cấp duyệt tương ứng theo khoảng giá trị đơn hàng. "Role tương ứng" ở đây là <b>Vai trò duyệt mua hàng</b> (chọn ở trang Phân quyền khi tạo/sửa user) — <b>khác</b> với "Role" hệ thống (admin/user/lái xe...). Tài khoản admin/viceadmin luôn có thể duyệt mọi cấp.</div>
+      <div id="ruleList"></div>
+      <button class="btn btn-new btn-sm" style="margin-top:8px" onclick="addRule()">➕ Thêm bậc</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal('modalApprovalCfg')">Đóng</button>
+      <button class="btn btn-save" onclick="saveApprovalRules()">💾 Lưu cấu hình</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+(async () => {
+let w=0; while(!window.__fbReady && w<4000){await new Promise(r=>setTimeout(r,30));w+=30;}
+await new Promise(r=>document.readyState==="loading"?document.addEventListener("DOMContentLoaded",r):r());
+{
+  const session = window.__session || { username:"user", role:"user" };
+
+  /* ===================== FIREBASE ===================== */
+  const { initializeApp } = window.__fbApp;
+  const { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query, orderBy } = window.__fbFS;
+  const { getDatabase, ref, onValue, set } = window.__fbRTDB;
+  const _fbapp = initializeApp({
+    apiKey: "AIzaSyAPmHlNgx-w5KfK4LF490pvdYA_mGgcX_k",
+    authDomain: "purchasing-4d698.firebaseapp.com",
+    databaseURL: "https://purchasing-4d698-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "purchasing-4d698",
+    storageBucket: "purchasing-4d698.firebasestorage.app",
+    messagingSenderId: "1097685849973",
+    appId: "1:1097685849973:web:79ad636e3dfd0b12f7653c"
+  });
+  const db   = getFirestore(_fbapp);
+  const rtdb = getDatabase(_fbapp);
+  // Collection/nhánh riêng cho module Purchasing — không đụng dữ liệu Trucking cũ
+  const colRef       = collection(db, `purchasing_docs_${APP_ID}`);
+  const MASTER_PATH   = `purchasing_master_${APP_ID}`;
+  const RULES_PATH    = `purchasing_rules_${APP_ID}`;
+
+  /* ===================== STATE ===================== */
+  window.store = [];           // toàn bộ phiếu PR/PO
+  let MASTER = { suppliers:[], items:[], warehouses:[], units:[], departments:[] };
+  let RULES  = [];             // bậc thang duyệt
+  let currentTabFilter = "all";
+  let lineSeq = 0;
+
+  const STAGES = [
+    { key:"pr",       label:"Yêu cầu (PR)" },
+    { key:"approval", label:"Phê duyệt" },
+    { key:"po",       label:"Đặt hàng (PO)" },
+    { key:"receipt",  label:"Nhận hàng" },
+    { key:"invoice",  label:"Đối chiếu HĐ" },
+    { key:"closed",   label:"Hoàn tất" },
+  ];
+
+  const STATUS_META = {
+    draft:            { text:"📝 Nháp",            cls:"badge-draft" },
+    pending_approval: { text:"⏳ Chờ duyệt",        cls:"badge-pending" },
+    approved:         { text:"✅ Đã duyệt",         cls:"badge-approved" },
+    rejected:         { text:"❌ Từ chối",          cls:"badge-rejected" },
+    po_issued:        { text:"🛒 Đã đặt hàng",      cls:"badge-po" },
+    receiving:        { text:"📦 Đang nhận hàng",   cls:"badge-receiving" },
+    received:         { text:"📥 Đã nhận đủ",       cls:"badge-received" },
+    invoice_matching: { text:"🧾 Đối chiếu HĐ",     cls:"badge-invoicing" },
+    matched:          { text:"✔ Khớp hóa đơn",      cls:"badge-matched" },
+    mismatch:         { text:"⚠ Lệch hóa đơn",      cls:"badge-mismatch" },
+    closed:           { text:"🏁 Hoàn tất",         cls:"badge-closed" },
+  };
+  const STATUS_TABS = [
+    ["all","Tất cả"],["draft","Nháp"],["pending_approval","Chờ duyệt"],
+    ["approved","Đã duyệt"],["rejected","Từ chối"],["po_issued","Đã đặt hàng"],
+    ["receiving","Đang nhận"],["received","Đã nhận đủ"],
+    ["invoice_matching","Đối chiếu HĐ"],["matched","Khớp HĐ"],["closed","Hoàn tất"]
+  ];
+
+  function fmtMoney(n){ n = Number(n)||0; return n.toLocaleString('vi-VN'); }
+  function todayStr(){ return new Date().toISOString().slice(0,10); }
+  function uid(pfx){ return `${pfx}${Date.now()}${Math.floor(Math.random()*1000)}`; }
+  function isAdmin(){ return session.role==="admin" || session.role==="viceadmin"; }
+
+  /* ===================== MASTER DATA REALTIME ===================== */
+  onValue(ref(rtdb, MASTER_PATH), snap=>{
+    const v = snap.val() || {};
+    MASTER = {
+      suppliers: v.suppliers||[], items: v.items||[], warehouses: v.warehouses||[], units: v.units||[],
+      departments: v.departments||[]
+    };
+    if (!MASTER.departments.length){
+      // Chưa có phòng ban nào → tự tạo 1 bộ khởi điểm để không bị trống, admin có thể sửa/xóa/thêm sau
+      MASTER.departments = [
+        { code:"VT",  name:"Phòng Vận tải" },
+        { code:"NS",  name:"Phòng Nhân sự" },
+        { code:"KV",  name:"Phòng Kho vận" }
+      ];
+      set(ref(rtdb, MASTER_PATH), MASTER).catch(e=>console.warn("Không tự tạo được phòng ban mặc định:", e));
+    }
+    document.getElementById("warnBanner").style.display =
+      (!MASTER.suppliers.length && !MASTER.items.length && isAdmin()) ? "block" : "none";
+    renderMasterTables();
+    rebuildDatalists();
+    renderTable();
+  });
+
+  onValue(ref(rtdb, RULES_PATH), snap=>{
+    const v = snap.val();
+    if (Array.isArray(v) && v.length){
+      RULES = v;
+    } else {
+      // Chưa từng lưu cấu hình → tự ghi bộ mặc định vào Firebase ngay,
+      // để trang Phân quyền (users.html) luôn đọc được danh sách vai trò duyệt.
+      RULES = defaultRules();
+      set(ref(rtdb, RULES_PATH), RULES).catch(e=>console.warn("Không tự lưu được cấu hình duyệt mặc định:", e));
+    }
+    renderRuleList();
+  });
+
+  function defaultRules(){
+    return [
+      { id:uid("r"), min:0,         max:10000000,   levels:[{title:"Trưởng phòng mua hàng", role:"manager"}] },
+      { id:uid("r"), min:10000000,  max:50000000,   levels:[{title:"Trưởng phòng mua hàng", role:"manager"},{title:"Giám đốc tài chính", role:"director"}] },
+      { id:uid("r"), min:50000000,  max:200000000,  levels:[{title:"Trưởng phòng mua hàng", role:"manager"},{title:"Giám đốc tài chính", role:"director"},{title:"Tổng giám đốc", role:"ceo"}] },
+      { id:uid("r"), min:200000000, max:null,       levels:[{title:"Trưởng phòng mua hàng", role:"manager"},{title:"Giám đốc tài chính", role:"director"},{title:"Tổng giám đốc", role:"ceo"},{title:"Hội đồng quản trị", role:"board"}] },
+    ];
+  }
+
+  function computeRequiredLevels(total){
+    const rule = RULES.find(r => total >= (r.min||0) && (r.max==null || total < r.max));
+    return rule ? rule.levels.map((l,i)=>({level:i+1, title:l.title, role:l.role})) : [];
+  }
+
+  /* ===================== DATALISTS ===================== */
+  function rebuildDatalists(){
+    const sel = document.getElementById("department");
+    if (!sel) return;
+    const cur = sel.value;
+    sel.innerHTML = `<option value="">-- Chọn phòng ban --</option>` +
+      (MASTER.departments||[]).map(d=>`<option value="${d.name}">${d.name}</option>`).join("");
+    setDepartmentValue(cur); // giữ lại lựa chọn hiện tại (kể cả phòng ban cũ không còn trong danh mục)
+  }
+  function setDepartmentValue(val){
+    const sel = document.getElementById("department");
+    if (!sel) return;
+    if (val && ![...sel.options].some(o=>o.value===val)){
+      const opt = document.createElement("option");
+      opt.value = val; opt.textContent = val + " (cũ, không còn trong danh mục)";
+      sel.appendChild(opt);
+    }
+    sel.value = val || "";
+  }
+
+  /* ===================== FIRESTORE SYNC (PR/PO docs) ===================== */
+  onSnapshot(query(colRef, orderBy("prDate","desc")), snap=>{
+    store = snap.docs.map(d=>d.data());
+    renderTabs();
+    renderTable();
+  });
+
+  async function saveDoc(record){
+    try { await setDoc(doc(db, `purchasing_docs_${APP_ID}`, record.id), record); }
+    catch(e){ console.error(e); alert("Lỗi lưu Firestore: "+e.message); }
+  }
+  async function removeDoc(id){
+    try { await deleteDoc(doc(db, `purchasing_docs_${APP_ID}`, id)); }
+    catch(e){ console.error(e); }
+  }
+
+  /* ===================== STATUS TABS ===================== */
+  function renderTabs(){
+    const wrap = document.getElementById("statusTabs");
+    wrap.innerHTML = STATUS_TABS.map(([key,label])=>{
+      const cnt = key==="all" ? store.length : store.filter(r=>r.status===key).length;
+      return `<button class="stab ${currentTabFilter===key?'active':''}" onclick="setTabFilter('${key}')">${label}<span class="cnt">${cnt}</span></button>`;
+    }).join("");
+  }
+  window.setTabFilter = function(key){ currentTabFilter = key; renderTabs(); renderTable(); };
+
+  /* ===================== MAIN TABLE ===================== */
+  function filteredData(){
+    const key  = (document.getElementById("searchKeyword").value||"").toLowerCase().trim();
+    const from = document.getElementById("fromDate").value;
+    const to   = document.getElementById("toDate").value;
+    return store.filter(r=>{
+      if (currentTabFilter!=="all" && r.status!==currentTabFilter) return false;
+      const mk = !key || [r.prNo,r.poNo,r.requester,r.department,mainSupplierName(r)].some(v=>String(v||"").toLowerCase().includes(key));
+      const mf = !from || r.prDate >= from;
+      const mt = !to   || r.prDate <= to;
+      return mk && mf && mt;
+    });
+  }
+
+  function mainSupplierName(r){
+    const names = [...new Set((r.lines||[]).map(l=>l.supplierName).filter(Boolean))];
+    return names[0] || "—";
+  }
+
+  function miniStepperHTML(r){
+    const {stageIdx, bad} = computeStageIndex(r);
+    return `<span class="mstep">` + STAGES.map((s,i)=>{
+      let cls = "";
+      if (stageIdx>=6) cls="done";                 // closed → toàn bộ 6 mốc đã hoàn tất
+      else if (bad && i===stageIdx) cls="bad";
+      else if (i<stageIdx) cls="done";
+      else if (i===stageIdx) cls="now";
+      return `<i class="${cls}" title="${s.label}"></i>`;
+    }).join("") + `</span>`;
+  }
+
+  function computeStageIndex(r){
+    // stageIdx = mốc đang xử lý (các mốc phía trước coi là đã xong).
+    // Riêng "closed" trả về 6 (ngoài phạm vi 0-5) để báo hiệu TẤT CẢ 6 mốc đã hoàn tất.
+    const map = {
+      draft:0,
+      pending_approval:1, rejected:1,
+      approved:2,
+      po_issued:3, receiving:3,
+      received:4, invoice_matching:4, mismatch:4,
+      matched:5,
+      closed:6
+    };
+    const bad = r.status==="rejected" || r.status==="mismatch";
+    return { stageIdx: map[r.status] ?? 0, bad };
+  }
+
+  function renderTable(){
+    const tbody = document.getElementById("tbody");
+    const data = filteredData();
+    tbody.innerHTML = "";
+    let sum = 0;
+    data.forEach((r,i)=>{
+      sum += Number(r.totalValue)||0;
+      const meta = STATUS_META[r.status] || STATUS_META.draft;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${i+1}</td>
+        <td style="font-family:monospace;font-weight:700">${r.prNo||""}</td>
+        <td>${r.prDate||""}</td>
+        <td class="tl">${r.requester||""}</td>
+        <td class="tl">${r.department||""}</td>
+        <td class="tl">${mainSupplierName(r)}</td>
+        <td class="tr" style="font-family:monospace">${fmtMoney(r.totalValue)}</td>
+        <td><span class="badge ${meta.cls}">${meta.text}</span></td>
+        <td>${miniStepperHTML(r)}</td>
+        <td style="font-family:monospace">${r.poNo||"—"}</td>
+        <td><button class="btn btn-view btn-sm" onclick="openDetail('${r.id}')">🔍 Xử lý</button></td>
+        <td>${r.status==='draft'?`<button class="btn btn-edit btn-sm" onclick="editPR('${r.id}')">✏️</button>`:''}</td>
+        <td>${r.status==='draft'?`<button class="btn btn-del btn-sm" onclick="delRow('${r.id}')">🗑️</button>`:''}</td>`;
+      tbody.appendChild(tr);
+    });
+    document.getElementById("totalQty").textContent = data.length;
+    document.getElementById("totalValueSum").textContent = fmtMoney(sum);
+  }
+
+  window.searchData  = renderTable;
+  window.clearSearch = function(){
+    document.getElementById("searchKeyword").value="";
+    document.getElementById("fromDate").value="";
+    document.getElementById("toDate").value="";
+    renderTable();
+  };
+
+  /* ===================== MODAL HELPERS ===================== */
+  window.closeModal = function(id){ document.getElementById(id).classList.remove("open"); };
+  function openModal(id){ document.getElementById(id).classList.add("open"); }
+  window.switchTab = function(tabId){
+    document.querySelectorAll("#modalDetail .tab-btn").forEach(b=>b.classList.toggle("active", b.dataset.tab===tabId));
+    document.querySelectorAll("#modalDetail .tab-panel").forEach(p=>p.classList.toggle("active", p.id===tabId));
+  };
+  window.switchMTab = function(tabId){
+    document.querySelectorAll("#modalMaster .tab-btn").forEach(b=>b.classList.toggle("active", b.dataset.mtab===tabId));
+    document.querySelectorAll("#modalMaster .tab-panel").forEach(p=>p.classList.toggle("active", p.dataset.mpanel===tabId));
+  };
+
+  /* ===================== PR FORM ===================== */
+  window.openPRModal = function(){
+    document.getElementById("prModalTitle").textContent = "＋ Tạo Yêu cầu mua hàng (PR)";
+    document.getElementById("prId").value = "";
+    document.getElementById("prDate").value = todayStr();
+    document.getElementById("neededDate").value = "";
+    document.getElementById("requester").value = session.username||"";
+    setDepartmentValue("");
+    document.getElementById("priority").value = "normal";
+    document.getElementById("prNote").value = "";
+    document.getElementById("lineBody").innerHTML = "";
+    addLine();
+    updatePRTotal();
+    openModal("modalPR");
+  };
+
+  window.editPR = function(id){
+    const r = store.find(x=>x.id===id);
+    if (!r) return;
+    document.getElementById("prModalTitle").textContent = "✏️ Sửa Yêu cầu mua hàng (PR)";
+    document.getElementById("prId").value = r.id;
+    document.getElementById("prDate").value = r.prDate||todayStr();
+    document.getElementById("neededDate").value = r.neededDate||"";
+    document.getElementById("requester").value = r.requester||"";
+    setDepartmentValue(r.department||"");
+    document.getElementById("priority").value = r.priority||"normal";
+    document.getElementById("prNote").value = r.note||"";
+    document.getElementById("lineBody").innerHTML = "";
+    (r.lines||[]).forEach(l=>addLine(l));
+    updatePRTotal();
+    openModal("modalPR");
+  };
+
+  function supplierOptionsHTML(selected){
+    return `<option value="">--</option>` + MASTER.suppliers.map(s=>`<option value="${s.code}" ${s.code===selected?'selected':''}>${s.name}</option>`).join("");
+  }
+  function warehouseOptionsHTML(selected){
+    return `<option value="">--</option>` + MASTER.warehouses.map(w=>`<option value="${w.code}" ${w.code===selected?'selected':''}>${w.name}</option>`).join("");
+  }
+  function itemOptionsHTML(selected){
+    return `<option value="">--</option>` + MASTER.items.map(it=>`<option value="${it.code}" ${it.code===selected?'selected':''}>${it.name}</option>`).join("");
+  }
+
+  window.addLine = function(data){
+    const id = "ln"+(lineSeq++);
+    const tr = document.createElement("tr");
+    tr.id = id;
+    tr.innerHTML = `
+      <td><select class="ln-item" onchange="onItemPick('${id}')">${itemOptionsHTML(data&&data.itemCode)}</select></td>
+      <td><input class="ln-unit" readonly value="${data&&data.unit||''}"></td>
+      <td><input class="ln-qty" type="number" min="0" step="1" value="${data&&data.qty||1}" oninput="updatePRTotal()"></td>
+      <td><input class="ln-price" type="number" min="0" value="${data&&data.estPrice||0}" oninput="updatePRTotal()"></td>
+      <td><input class="ln-total" readonly value="0"></td>
+      <td><select class="ln-wh">${warehouseOptionsHTML(data&&data.warehouseCode)}</select></td>
+      <td><select class="ln-sup">${supplierOptionsHTML(data&&data.supplierCode)}</select></td>
+      <td><input class="ln-note" value="${data&&data.note||''}"></td>
+      <td><button type="button" class="quote-btn ${data&&data.quoteLink?'has-link':''}" data-link="${data&&data.quoteLink||''}" onclick="setQuoteLink('${id}')">${data&&data.quoteLink?'🔗 Đã có':'📎 Thêm'}</button></td>
+      <td><button class="rm" onclick="removeLine('${id}')">✕</button></td>`;
+    document.getElementById("lineBody").appendChild(tr);
+    if (data) updateLineTotal(tr);
+  };
+
+  window.onItemPick = function(rowId){
+    const tr = document.getElementById(rowId);
+    const code = tr.querySelector(".ln-item").value;
+    const it = MASTER.items.find(x=>x.code===code);
+    if (it){
+      tr.querySelector(".ln-unit").value = it.unit||"";
+      tr.querySelector(".ln-price").value = it.defaultPrice ? fmtMoney(it.defaultPrice) : "";
+      if (it.defaultSupplierCode) tr.querySelector(".ln-sup").value = it.defaultSupplierCode;
+    }
+    updateLineTotal(tr);
+    updatePRTotal();
+  };
+
+  function updateLineTotal(tr){
+    const qty = parseFloat(tr.querySelector(".ln-qty").value)||0;
+    const price = parseFloat(tr.querySelector(".ln-price").value)||0;
+    tr.querySelector(".ln-total").value = fmtMoney(qty*price);
+  }
+
+  window.removeLine = function(id){
+    const el = document.getElementById(id);
+    if (el) el.remove();
+    updatePRTotal();
+  };
+
+  window.setQuoteLink = function(rowId){
+    const tr = document.getElementById(rowId);
+    const btn = tr.querySelector(".quote-btn");
+    const current = btn.dataset.link || "";
+    const url = prompt("Dán link báo giá của NCC (Google Drive / OneDrive / ...):", current);
+    if (url===null) return; // bấm Hủy
+    const trimmed = url.trim();
+    btn.dataset.link = trimmed;
+    btn.textContent = trimmed ? "🔗 Đã có" : "📎 Thêm";
+    btn.classList.toggle("has-link", !!trimmed);
+  };
+
+  window.updatePRTotal = function(){
+    let total = 0;
+    document.querySelectorAll("#lineBody tr").forEach(tr=>{
+      updateLineTotal(tr);
+      const qty = parseFloat(tr.querySelector(".ln-qty").value)||0;
+      const price = parseFloat(tr.querySelector(".ln-price").value)||0;
+      total += qty*price;
+    });
+    document.getElementById("prTotalDisplay").textContent = fmtMoney(total)+" đ";
+    const levels = computeRequiredLevels(total);
+    document.getElementById("prApprovalPreview").innerHTML = levels.length
+      ? `📊 Với giá trị <b>${fmtMoney(total)} đ</b>, phiếu sẽ cần <b>${levels.length} cấp duyệt</b>: ${levels.map(l=>l.title).join(" → ")}`
+      : `📊 Chưa xác định được bậc duyệt cho giá trị này — kiểm tra Cấu hình duyệt.`;
+    return total;
+  };
+
+  function collectLines(){
+    const lines = [];
+    document.querySelectorAll("#lineBody tr").forEach(tr=>{
+      const itemCode = tr.querySelector(".ln-item").value;
+      const item = MASTER.items.find(x=>x.code===itemCode);
+      const supCode = tr.querySelector(".ln-sup").value;
+      const sup = MASTER.suppliers.find(x=>x.code===supCode);
+      const whCode = tr.querySelector(".ln-wh").value;
+      const wh = MASTER.warehouses.find(x=>x.code===whCode);
+      const qty = parseFloat(tr.querySelector(".ln-qty").value)||0;
+      const price = parseFloat(tr.querySelector(".ln-price").value)||0;
+      lines.push({
+        id: uid("l"),
+        itemCode, itemName: item?item.name:"",
+        unit: tr.querySelector(".ln-unit").value,
+        qty, estPrice: price, lineTotal: qty*price,
+        warehouseCode: whCode, warehouseName: wh?wh.name:"",
+        supplierCode: supCode, supplierName: sup?sup.name:"",
+        note: tr.querySelector(".ln-note").value,
+        quoteLink: (tr.querySelector(".quote-btn").dataset.link || "").trim(),
+        receivedQty: 0, poQty: qty, poPrice: price
+      });
+    });
+    return lines;
+  }
+
+  window.savePR = async function(submit){
+    const requester = document.getElementById("requester").value.trim();
+    if (!requester){ alert("Chưa nhập người đề xuất"); return; }
+    const lines = collectLines();
+    if (!lines.length || lines.every(l=>!l.itemCode)){ alert("Chưa có dòng hàng hóa nào"); return; }
+    const total = updatePRTotal();
+    const existingId = document.getElementById("prId").value;
+    const isNew = !existingId;
+    const id = existingId || uid("PR");
+
+    let prNo = isNew ? genDocNo("PR") : (store.find(x=>x.id===id)||{}).prNo;
+
+    const record = {
+      id, prNo,
+      prDate: document.getElementById("prDate").value || todayStr(),
+      neededDate: document.getElementById("neededDate").value,
+      requester, department: document.getElementById("department").value,
+      priority: document.getElementById("priority").value,
+      note: document.getElementById("prNote").value,
+      lines, totalValue: total,
+      createdBy: session.username, createdAt: (store.find(x=>x.id===id)||{}).createdAt || Date.now(),
+      status: submit ? "pending_approval" : "draft",
+      requiredLevels: submit ? computeRequiredLevels(total) : [],
+      currentLevel: submit ? 1 : 0,
+      approvals: (store.find(x=>x.id===id)||{}).approvals || [],
+      poNo:(store.find(x=>x.id===id)||{}).poNo||"", poDate:(store.find(x=>x.id===id)||{}).poDate||"",
+      poTerms:(store.find(x=>x.id===id)||{}).poTerms||"", poDeliveryDate:(store.find(x=>x.id===id)||{}).poDeliveryDate||"",
+      receipts:(store.find(x=>x.id===id)||{}).receipts||[],
+      invoice:(store.find(x=>x.id===id)||{}).invoice||null
+    };
+    await saveDoc(record);
+    closeModal("modalPR");
+  };
+
+  function genDocNo(prefix){
+    const d = new Date();
+    const ds = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+    const seq = store.filter(x=>(x.prNo||x.poNo||"").includes(ds)).length + 1;
+    return `${prefix}-${ds}-${String(seq).padStart(3,'0')}`;
+  }
+
+  window.delRow = async function(id){
+    if (!confirm("Xác nhận xóa phiếu nháp này?")) return;
+    await removeDoc(id);
+  };
+
+  /* ===================== STEPPER (full) ===================== */
+  function renderFullStepper(r){
+    const {stageIdx, bad} = computeStageIndex(r);
+    const html = STAGES.map((s,i)=>{
+      let cls = "";
+      if (stageIdx>=6) cls="done";                 // closed → toàn bộ 6 mốc đã hoàn tất
+      else if (bad && i===stageIdx) cls="bad";
+      else if (i<stageIdx) cls="done";
+      else if (i===stageIdx) cls="now";
+      let sub = "";
+      if (s.key==="approval" && (r.requiredLevels||[]).length){
+        const done = (r.approvals||[]).filter(a=>a.decision==="approved").length;
+        sub = `${done}/${r.requiredLevels.length} cấp`;
+      }
+      const icon = cls==="done" ? "✓" : cls==="bad" ? "✕" : (i+1);
+      return `<div class="step-item ${cls}">
+        <div class="step-circle">${icon}</div>
+        <div class="step-label">${s.label}</div>
+        ${sub?`<div class="step-sub">${sub}</div>`:""}
+      </div>`;
+    }).join("");
+    document.getElementById("detailStepper").innerHTML = html;
+  }
+
+  /* ===================== DETAIL MODAL ===================== */
+  window.openDetail = function(id){
+    const r = store.find(x=>x.id===id);
+    if (!r) return;
+    document.getElementById("detailTitle").textContent = `Phiếu ${r.prNo}${r.poNo?' / PO '+r.poNo:''} — ${r.requester}`;
+    renderFullStepper(r);
+    renderDetailInfo(r);
+    renderDetailApproval(r);
+    renderDetailPO(r);
+    renderDetailReceipt(r);
+    renderDetailInvoice(r);
+    renderDetailFooter(r);
+    switchTab('tabInfo');
+    openModal("modalDetail");
+  };
+
+  function renderDetailInfo(r){
+    document.getElementById("tabInfo").innerHTML = `
+      <div class="row row-r2" style="margin-bottom:10px">
+        <div class="field"><span class="lbl">Ngày đề nghị</span><input readonly value="${r.prDate||''}"></div>
+        <div class="field"><span class="lbl">Ngày cần hàng</span><input readonly value="${r.neededDate||'—'}"></div>
+        <div class="field"><span class="lbl">Phòng ban</span><input readonly value="${r.department||'—'}"></div>
+        <div class="field"><span class="lbl">Ưu tiên</span><input readonly value="${({normal:'Bình thường',urgent:'Gấp',critical:'Khẩn cấp'})[r.priority]||''}"></div>
+      </div>
+      <table class="mini-tbl">
+        <thead><tr><th>Vật tư</th><th>ĐVT</th><th>SL</th><th>Đơn giá</th><th>Thành tiền</th><th>Kho nhận</th><th>NCC đề xuất</th><th>Báo giá</th></tr></thead>
+        <tbody>${(r.lines||[]).map(l=>`<tr>
+          <td>${l.itemName}</td><td>${l.unit}</td><td style="text-align:right">${l.qty}</td>
+          <td style="text-align:right">${fmtMoney(l.estPrice)}</td><td style="text-align:right">${fmtMoney(l.lineTotal)}</td>
+          <td>${l.warehouseName}</td><td>${l.supplierName}</td>
+          <td>${l.quoteLink?`<a href="${l.quoteLink}" target="_blank" rel="noopener">🔗 Xem</a>`:'—'}</td></tr>`).join("")}</tbody>
+      </table>
+      <div class="line-total-bar">Tổng giá trị: <span>${fmtMoney(r.totalValue)} đ</span></div>
+      ${r.note?`<div class="note-box" style="margin-top:8px">📝 Ghi chú: ${r.note}</div>`:""}
+    `;
+  }
+
+  function renderDetailApproval(r){
+    const levels = r.requiredLevels||[];
+    if (!levels.length){
+      document.getElementById("tabApproval").innerHTML = `<div class="note-box">Phiếu chưa gửi duyệt (đang ở trạng thái Nháp).</div>`;
+      return;
+    }
+    const html = levels.map(lv=>{
+      const done = (r.approvals||[]).find(a=>a.level===lv.level);
+      let cls="wait", statusText="Chờ duyệt";
+      if (done){ cls = done.decision==="approved" ? "ok" : "no"; statusText = done.decision==="approved"?"Đã duyệt":"Từ chối"; }
+      else if (lv.level !== r.currentLevel) { statusText = "Chưa tới lượt"; }
+      const badgeIcon = cls==="ok"?"✓":cls==="no"?"✕":lv.level;
+      return `<div class="appr-row ${cls}">
+        <div class="appr-badge">${badgeIcon}</div>
+        <div class="appr-info">
+          <div class="appr-title">Cấp ${lv.level}: ${lv.title} <span style="color:var(--muted);font-weight:500">(role: ${lv.role})</span></div>
+          <div class="appr-meta">${statusText}${done?` — bởi ${done.approver} lúc ${new Date(done.timestamp).toLocaleString('vi-VN')}`:""}</div>
+          ${done && done.comment?`<div class="appr-comment">"${done.comment}"</div>`:""}
+        </div>
+      </div>`;
+    }).join("");
+    document.getElementById("tabApproval").innerHTML = `<div class="appr-list">${html}</div>`;
+  }
+
+  function renderDetailPO(r){
+    const el = document.getElementById("tabPO");
+    if (r.status==="draft" || r.status==="pending_approval" || r.status==="rejected"){
+      el.innerHTML = `<div class="note-box">Đơn hàng (PO) chỉ có thể lập sau khi phiếu PR đã được duyệt toàn bộ.</div>`;
+      return;
+    }
+    if (!r.poNo){
+      el.innerHTML = `
+        <div class="note-box">✅ PR đã được duyệt đầy đủ. Nhập thông tin để phát hành Đơn đặt hàng (PO).</div>
+        <div class="row row-r2">
+          <div class="field"><span class="lbl">Điều khoản thanh toán</span><input id="poTermsInput" placeholder="VD: Net 30..."></div>
+          <div class="field"><span class="lbl">Ngày giao hàng dự kiến</span><input id="poDeliveryInput" type="date"></div>
+        </div>`;
+      return;
+    }
+    el.innerHTML = `
+      <div class="row row-r2">
+        <div class="field"><span class="lbl">Số PO</span><input readonly value="${r.poNo}"></div>
+        <div class="field"><span class="lbl">Ngày phát hành</span><input readonly value="${r.poDate}"></div>
+        <div class="field"><span class="lbl">Điều khoản TT</span><input readonly value="${r.poTerms||'—'}"></div>
+        <div class="field"><span class="lbl">Ngày giao dự kiến</span><input readonly value="${r.poDeliveryDate||'—'}"></div>
+      </div>
+      <table class="mini-tbl"><thead><tr><th>Vật tư</th><th>SL đặt</th><th>Đơn giá PO</th><th>Thành tiền</th><th>NCC</th></tr></thead>
+      <tbody>${(r.lines||[]).map(l=>`<tr><td>${l.itemName}</td><td style="text-align:right">${l.poQty}</td><td style="text-align:right">${fmtMoney(l.poPrice)}</td><td style="text-align:right">${fmtMoney(l.poQty*l.poPrice)}</td><td>${l.supplierName}</td></tr>`).join("")}</tbody></table>`;
+  }
+
+  function renderDetailReceipt(r){
+    const el = document.getElementById("tabReceipt");
+    if (!r.poNo){ el.innerHTML = `<div class="note-box">Chưa có PO — chưa thể nhận hàng.</div>`; return; }
+    const rows = (r.lines||[]).map(l=>`<tr><td>${l.itemName}</td><td style="text-align:right">${l.poQty}</td><td style="text-align:right">${l.receivedQty||0}</td>
+      <td style="text-align:right">${Math.max(0,l.poQty-(l.receivedQty||0))}</td>
+      <td>${(l.receivedQty||0) >= l.poQty ? '<span class="badge badge-received">Đủ</span>' : (l.receivedQty>0?'<span class="badge badge-receiving">Một phần</span>':'<span class="badge badge-draft">Chưa nhận</span>')}</td></tr>`).join("");
+    const history = (r.receipts||[]).map(rc=>`<div class="appr-meta">📦 ${rc.date} — ${rc.receivedBy}${rc.note?': '+rc.note:''}</div>`).join("");
+    el.innerHTML = `
+      <table class="mini-tbl"><thead><tr><th>Vật tư</th><th>SL đặt</th><th>Đã nhận</th><th>Còn lại</th><th>TT</th></tr></thead><tbody>${rows}</tbody></table>
+      ${history?`<div class="note-box" style="margin-top:8px">${history}</div>`:""}
+      ${r.status!=="closed" ? `
+      <div class="sec" style="margin-top:10px"><div class="sec-line"></div><div class="sec-label">Ghi nhận nhận hàng mới</div><div class="sec-line"></div></div>
+      <table class="mini-tbl"><thead><tr><th>Vật tư</th><th>Còn lại</th><th>SL nhận lần này</th></tr></thead>
+      <tbody>${(r.lines||[]).map((l,i)=>`<tr><td>${l.itemName}</td><td style="text-align:right">${Math.max(0,l.poQty-(l.receivedQty||0))}</td><td><input class="rcv-qty" data-idx="${i}" type="number" min="0" max="${Math.max(0,l.poQty-(l.receivedQty||0))}" value="0" style="width:90px"></td></tr>`).join("")}</tbody></table>
+      <div class="row row-r2" style="margin-top:8px"><div class="field"><span class="lbl">Ghi chú nhận hàng</span><input id="rcvNote" placeholder="..."></div></div>
+      ` : ""}
+    `;
+  }
+
+  function renderDetailInvoice(r){
+    const el = document.getElementById("tabInvoice");
+    if (r.status!=="received" && r.status!=="invoice_matching" && r.status!=="matched" && r.status!=="mismatch" && r.status!=="closed"){
+      el.innerHTML = `<div class="note-box">Đối chiếu hóa đơn chỉ thực hiện sau khi đã nhận đủ hàng.</div>`;
+      return;
+    }
+    const poTotal = (r.lines||[]).reduce((s,l)=>s+l.poQty*l.poPrice,0);
+    if (!r.invoice){
+      el.innerHTML = `
+        <div class="note-box">Tổng giá trị PO: <b>${fmtMoney(poTotal)} đ</b>. Nhập thông tin hóa đơn để đối chiếu 3 chiều (PO – Nhận hàng – Hóa đơn).</div>
+        <div class="row row-r2">
+          <div class="field"><span class="lbl">Số hóa đơn</span><input id="invNo" placeholder="VD: HD-00123"></div>
+          <div class="field"><span class="lbl">Ngày hóa đơn</span><input id="invDate" type="date" value="${todayStr()}"></div>
+          <div class="field"><span class="lbl">Giá trị hóa đơn</span><input id="invAmount" type="text" inputmode="numeric" placeholder="0" oninput="formatMoneyInputLive(this)"></div>
+        </div>`;
+      return;
+    }
+    const diff = r.invoice.invoiceAmount - poTotal;
+    const pct = poTotal? Math.abs(diff)/poTotal*100 : 0;
+    el.innerHTML = `
+      <div class="row row-r2">
+        <div class="field"><span class="lbl">Số hóa đơn</span><input readonly value="${r.invoice.invoiceNo}"></div>
+        <div class="field"><span class="lbl">Ngày hóa đơn</span><input readonly value="${r.invoice.invoiceDate}"></div>
+        <div class="field"><span class="lbl">Giá trị hóa đơn</span><input readonly value="${fmtMoney(r.invoice.invoiceAmount)}"></div>
+        <div class="field"><span class="lbl">Giá trị PO</span><input readonly value="${fmtMoney(poTotal)}"></div>
+      </div>
+      ${pct<=2 ? `<div class="match-box">✔ Khớp 3 chiều (PO – Nhận hàng – Hóa đơn). Chênh lệch ${pct.toFixed(1)}%.</div>`
+               : `<div class="mismatch-box">⚠ Lệch ${fmtMoney(Math.abs(diff))} đ (${pct.toFixed(1)}%) so với PO — cần kiểm tra lại trước khi thanh toán.</div>`}
+    `;
+  }
+
+  function renderDetailFooter(r){
+    const foot = document.getElementById("detailFooter");
+    let btns = `<button class="btn btn-cancel" onclick="closeModal('modalDetail')">Đóng</button>`;
+
+    if (r.status==="pending_approval"){
+      const lv = (r.requiredLevels||[]).find(l=>l.level===r.currentLevel);
+      const canApprove = lv && (isAdmin() || session.approvalRole===lv.role);
+      if (canApprove){
+        btns += `<button class="btn btn-reject" onclick="doApprove('${r.id}','rejected')">✕ Từ chối</button>
+                 <button class="btn btn-approve" onclick="doApprove('${r.id}','approved')">✓ Duyệt cấp ${r.currentLevel}</button>`;
+      } else if (lv) {
+        btns += `<span class="pill">⏳ Đang chờ: ${lv.title} (role: ${lv.role}) duyệt</span>`;
+      }
+    }
+    if (r.status==="approved" && !r.poNo){
+      btns += `<button class="btn btn-po" onclick="doConvertPO('${r.id}')">🛒 Phát hành PO</button>`;
+    }
+    if (r.poNo && (r.status==="po_issued" || r.status==="receiving")){
+      btns += `<button class="btn btn-receipt" onclick="doReceive('${r.id}')">📦 Ghi nhận nhận hàng</button>`;
+    }
+    if (r.status==="received"){
+      btns += `<button class="btn btn-invoice" onclick="doMatchInvoice('${r.id}')">🧾 Nhập hóa đơn đối chiếu</button>`;
+    }
+    if (r.status==="matched" || r.status==="mismatch"){
+      btns += `<button class="btn btn-close" onclick="doCloseRecord('${r.id}')">🏁 Hoàn tất phiếu</button>`;
+    }
+    foot.innerHTML = btns;
+  }
+
+  /* ===================== WORKFLOW ACTIONS ===================== */
+  window.doApprove = async function(id, decision){
+    const r = store.find(x=>x.id===id);
+    if (!r) return;
+    const lv = (r.requiredLevels||[]).find(l=>l.level===r.currentLevel);
+    if (!lv) return;
+    const comment = prompt(decision==="approved" ? "Ghi chú (không bắt buộc):" : "Lý do từ chối:") || "";
+    if (decision==="rejected" && !comment.trim()){ if(!confirm("Từ chối mà không ghi lý do?")) return; }
+    const approvals = [...(r.approvals||[]), { level:r.currentLevel, approver: session.username, role: session.role, decision, comment, timestamp: Date.now() }];
+    let status = r.status, currentLevel = r.currentLevel;
+    if (decision==="rejected"){ status="rejected"; }
+    else if (r.currentLevel >= r.requiredLevels.length){ status="approved"; }
+    else { currentLevel = r.currentLevel+1; }
+    await saveDoc({ ...r, approvals, status, currentLevel });
+    openDetail(id);
+  };
+
+  window.doConvertPO = async function(id){
+    const r = store.find(x=>x.id===id);
+    if (!r) return;
+    const terms = document.getElementById("poTermsInput")?.value || "";
+    const delivery = document.getElementById("poDeliveryInput")?.value || "";
+    const poNo = genDocNo("PO");
+    await saveDoc({ ...r, poNo, poDate: todayStr(), poTerms: terms, poDeliveryDate: delivery, status:"po_issued" });
+    openDetail(id);
+  };
+
+  window.doReceive = async function(id){
+    const r = store.find(x=>x.id===id);
+    if (!r) return;
+    const inputs = document.querySelectorAll(".rcv-qty");
+    const note = document.getElementById("rcvNote")?.value || "";
+    let any = false;
+    const lines = [...r.lines];
+    inputs.forEach(inp=>{
+      const idx = Number(inp.dataset.idx);
+      const q = parseFloat(inp.value)||0;
+      if (q>0){ any=true; lines[idx] = {...lines[idx], receivedQty: (lines[idx].receivedQty||0)+q}; }
+    });
+    if (!any){ alert("Chưa nhập số lượng nhận"); return; }
+    const receipts = [...(r.receipts||[]), { id: uid("rc"), date: todayStr(), receivedBy: session.username, note }];
+    const fullyReceived = lines.every(l=>(l.receivedQty||0) >= l.poQty);
+    const status = fullyReceived ? "received" : "receiving";
+    await saveDoc({ ...r, lines, receipts, status });
+    openDetail(id);
+  };
+
+  window.doMatchInvoice = async function(id){
+    const r = store.find(x=>x.id===id);
+    if (!r) return;
+    const invoiceNo = document.getElementById("invNo")?.value.trim();
+    const invoiceDate = document.getElementById("invDate")?.value;
+    const invAmountEl = document.getElementById("invAmount");
+    const invoiceAmount = invAmountEl ? parseMoneyInput(invAmountEl) : 0;
+    if (!invoiceNo || !invoiceAmount){ alert("Nhập đủ số hóa đơn và giá trị"); return; }
+    const poTotal = (r.lines||[]).reduce((s,l)=>s+l.poQty*l.poPrice,0);
+    const pct = poTotal ? Math.abs(invoiceAmount-poTotal)/poTotal*100 : 0;
+    const status = pct<=2 ? "matched" : "mismatch";
+    await saveDoc({ ...r, invoice:{ invoiceNo, invoiceDate, invoiceAmount }, status });
+    openDetail(id);
+  };
+
+  window.doCloseRecord = async function(id){
+    const r = store.find(x=>x.id===id);
+    if (!r) return;
+    if (!confirm("Xác nhận hoàn tất phiếu mua hàng này?")) return;
+    await saveDoc({ ...r, status:"closed" });
+    closeModal("modalDetail");
+  };
+
+  /* ===================== MASTER DATA UI ===================== */
+  window.openMasterModal = function(){
+    if (!isAdmin()){ alert("Chỉ Admin/Phó admin mới được cấu hình Master Data."); return; }
+    renderMasterTables(); openModal("modalMaster");
+  };
+  let MASTER_EDIT = null;
+  function cloneMaster(){ MASTER_EDIT = JSON.parse(JSON.stringify(MASTER)); }
+
+  function renderMasterTables(){
+    if (!MASTER_EDIT) cloneMaster();
+    const m = MASTER_EDIT || MASTER;
+    document.getElementById("tblSuppliers").innerHTML = m.suppliers.map((s,i)=>`
+      <tr>
+        <td><input value="${s.code||''}" oninput="MASTER_EDIT.suppliers[${i}].code=this.value"></td>
+        <td><input value="${s.name||''}" oninput="MASTER_EDIT.suppliers[${i}].name=this.value"></td>
+        <td><input value="${s.taxCode||''}" oninput="MASTER_EDIT.suppliers[${i}].taxCode=this.value"></td>
+        <td><input value="${s.contact||''}" oninput="MASTER_EDIT.suppliers[${i}].contact=this.value"></td>
+        <td><input value="${s.phone||''}" oninput="MASTER_EDIT.suppliers[${i}].phone=this.value"></td>
+        <td><input value="${s.email||''}" oninput="MASTER_EDIT.suppliers[${i}].email=this.value"></td>
+        <td><input value="${s.paymentTerms||''}" oninput="MASTER_EDIT.suppliers[${i}].paymentTerms=this.value"></td>
+        <td><button class="rm" onclick="delMasterRow('suppliers',${i})">✕</button></td>
+      </tr>`).join("");
+    document.getElementById("tblItems").innerHTML = m.items.map((it,i)=>`
+      <tr>
+        <td><input value="${it.code||''}" oninput="MASTER_EDIT.items[${i}].code=this.value"></td>
+        <td><input value="${it.name||''}" oninput="MASTER_EDIT.items[${i}].name=this.value"></td>
+        <td><input value="${it.unit||''}" oninput="MASTER_EDIT.items[${i}].unit=this.value"></td>
+        <td><input value="${it.category||''}" oninput="MASTER_EDIT.items[${i}].category=this.value"></td>
+        <td><input type="text" inputmode="numeric" value="${it.defaultPrice?fmtMoney(it.defaultPrice):''}" oninput="formatMoneyInputLive(this);MASTER_EDIT.items[${i}].defaultPrice=parseMoneyInput(this)"></td>
+        <td><input value="${it.defaultSupplierCode||''}" oninput="MASTER_EDIT.items[${i}].defaultSupplierCode=this.value"></td>
+        <td><button class="rm" onclick="delMasterRow('items',${i})">✕</button></td>
+      </tr>`).join("");
+    document.getElementById("tblWarehouses").innerHTML = m.warehouses.map((wh,i)=>`
+      <tr>
+        <td><input value="${wh.code||''}" oninput="MASTER_EDIT.warehouses[${i}].code=this.value"></td>
+        <td><input value="${wh.name||''}" oninput="MASTER_EDIT.warehouses[${i}].name=this.value"></td>
+        <td><input value="${wh.address||''}" oninput="MASTER_EDIT.warehouses[${i}].address=this.value"></td>
+        <td><input value="${wh.keeper||''}" oninput="MASTER_EDIT.warehouses[${i}].keeper=this.value"></td>
+        <td><button class="rm" onclick="delMasterRow('warehouses',${i})">✕</button></td>
+      </tr>`).join("");
+    document.getElementById("tblUnits").innerHTML = m.units.map((u,i)=>`
+      <tr>
+        <td><input value="${u.code||''}" oninput="MASTER_EDIT.units[${i}].code=this.value"></td>
+        <td><input value="${u.name||''}" oninput="MASTER_EDIT.units[${i}].name=this.value"></td>
+        <td><button class="rm" onclick="delMasterRow('units',${i})">✕</button></td>
+      </tr>`).join("");
+    document.getElementById("tblDepartments").innerHTML = (m.departments||[]).map((d,i)=>`
+      <tr>
+        <td><input value="${d.code||''}" oninput="MASTER_EDIT.departments[${i}].code=this.value"></td>
+        <td><input value="${d.name||''}" oninput="MASTER_EDIT.departments[${i}].name=this.value"></td>
+        <td><button class="rm" onclick="delMasterRow('departments',${i})">✕</button></td>
+      </tr>`).join("");
+  }
+  window.MASTER_EDIT = null;
+  window.addMasterRow = function(kind){
+    if (!MASTER_EDIT) cloneMaster();
+    const blanks = { suppliers:{code:"",name:"",taxCode:"",contact:"",phone:"",email:"",paymentTerms:""},
+      items:{code:"",name:"",unit:"",category:"",defaultPrice:0,defaultSupplierCode:""},
+      warehouses:{code:"",name:"",address:"",keeper:""}, units:{code:"",name:""}, departments:{code:"",name:""} };
+    if (!MASTER_EDIT[kind]) MASTER_EDIT[kind] = [];
+    MASTER_EDIT[kind].push(blanks[kind]);
+    renderMasterTables();
+  };
+  window.delMasterRow = function(kind, idx){
+    MASTER_EDIT[kind].splice(idx,1);
+    renderMasterTables();
+  };
+  window.saveMasterData = async function(){
+    if (!MASTER_EDIT) return;
+    try{ await set(ref(rtdb, MASTER_PATH), MASTER_EDIT); alert("✅ Đã lưu Master Data"); MASTER_EDIT=null; closeModal("modalMaster"); }
+    catch(e){ alert("Lỗi lưu: "+e.message); }
+  };
+
+  /* ===================== EXCEL IMPORT/EXPORT MASTER ===================== */
+  window.downloadMasterTemplate = async function(){
+    const wb = new ExcelJS.Workbook();
+    function sheet(name, headers, sample){
+      const ws = wb.addWorksheet(name);
+      ws.addRow(headers);
+      ws.getRow(1).eachCell(c=>{ c.font={bold:true,color:{argb:"FFFFFFFF"}}; c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF0D2248"}}; });
+      sample.forEach(r=>ws.addRow(r));
+      ws.columns.forEach(c=>c.width=20);
+    }
+    sheet("NhaCungCap", ["Ma NCC","Ten nha cung cap","Ma so thue","Nguoi lien he","SDT","Email","Dieu khoan TT"],
+      [["NCC001","Công ty TNHH ABC","0312345678","Nguyễn Văn A","0901234567","a@abc.com","Net 30"]]);
+    sheet("VatTu", ["Ma vat tu","Ten vat tu","DVT","Nhom hang","Don gia tham chieu","Ma NCC mac dinh"],
+      [["VT001","Dầu nhớt máy","Lít","Vật tư kỹ thuật","55000","NCC001"]]);
+    sheet("Kho", ["Ma kho","Ten kho","Dia chi","Thu kho"],
+      [["KHO01","Kho trung tâm Q7","123 Nguyễn Văn Linh, Q7","Trần Văn B"]]);
+    sheet("DonViTinh", ["Ma DVT","Ten don vi tinh"], [["LIT","Lít"],["CAI","Cái"],["KG","Kilogram"]]);
+    sheet("PhongBan", ["Ma phong ban","Ten phong ban"], [["VT","Phòng Vận tải"],["NS","Phòng Nhân sự"],["KV","Phòng Kho vận"]]);
+    const buf = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "Mau_MasterData_Purchasing.xlsx";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  };
+
+  window.exportMasterExcel = async function(){
+    const wb = new ExcelJS.Workbook();
+    function sheet(name, headers, rows){
+      const ws = wb.addWorksheet(name);
+      ws.addRow(headers);
+      ws.getRow(1).eachCell(c=>{ c.font={bold:true,color:{argb:"FFFFFFFF"}}; c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF0D2248"}}; });
+      rows.forEach(r=>ws.addRow(r));
+      ws.columns.forEach(c=>c.width=20);
+    }
+    sheet("NhaCungCap", ["Ma NCC","Ten nha cung cap","Ma so thue","Nguoi lien he","SDT","Email","Dieu khoan TT"],
+      MASTER.suppliers.map(s=>[s.code,s.name,s.taxCode,s.contact,s.phone,s.email,s.paymentTerms]));
+    sheet("VatTu", ["Ma vat tu","Ten vat tu","DVT","Nhom hang","Don gia tham chieu","Ma NCC mac dinh"],
+      MASTER.items.map(i=>[i.code,i.name,i.unit,i.category,i.defaultPrice,i.defaultSupplierCode]));
+    sheet("Kho", ["Ma kho","Ten kho","Dia chi","Thu kho"],
+      MASTER.warehouses.map(w=>[w.code,w.name,w.address,w.keeper]));
+    sheet("DonViTinh", ["Ma DVT","Ten don vi tinh"], MASTER.units.map(u=>[u.code,u.name]));
+    sheet("PhongBan", ["Ma phong ban","Ten phong ban"], (MASTER.departments||[]).map(d=>[d.code,d.name]));
+    const buf = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "MasterData_Purchasing.xlsx";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  };
+
+  window.importMasterExcel = async function(input){
+    const file = input.files[0];
+    if (!file) return;
+    try{
+      const buf = await file.arrayBuffer();
+      const wb = new ExcelJS.Workbook();
+      await wb.xlsx.load(buf);
+      function readSheet(name, mapFn){
+        const ws = wb.getWorksheet(name);
+        if (!ws) return [];
+        const out = [];
+        ws.eachRow((row,rowNumber)=>{
+          if (rowNumber===1) return;
+          const vals = row.values.slice(1).map(v=> (v && typeof v==='object' && v.text) ? v.text : v);
+          if (!vals.some(v=>v!==undefined && v!==null && v!=="")) return;
+          out.push(mapFn(vals));
+        });
+        return out;
+      }
+      const suppliers = readSheet("NhaCungCap", v=>({ code:String(v[0]||"").trim(), name:String(v[1]||"").trim(), taxCode:String(v[2]||""), contact:String(v[3]||""), phone:String(v[4]||""), email:String(v[5]||""), paymentTerms:String(v[6]||"") }));
+      const items = readSheet("VatTu", v=>({ code:String(v[0]||"").trim(), name:String(v[1]||"").trim(), unit:String(v[2]||""), category:String(v[3]||""), defaultPrice:Number(v[4])||0, defaultSupplierCode:String(v[5]||"") }));
+      const warehouses = readSheet("Kho", v=>({ code:String(v[0]||"").trim(), name:String(v[1]||"").trim(), address:String(v[2]||""), keeper:String(v[3]||"") }));
+      const units = readSheet("DonViTinh", v=>({ code:String(v[0]||"").trim(), name:String(v[1]||"").trim() }));
+      const departments = readSheet("PhongBan", v=>({ code:String(v[0]||"").trim(), name:String(v[1]||"").trim() }));
+
+      if (!suppliers.length && !items.length && !warehouses.length && !units.length && !departments.length){
+        alert("Không đọc được dữ liệu — kiểm tra đúng tên sheet: NhaCungCap, VatTu, Kho, DonViTinh, PhongBan"); return;
+      }
+      if (!confirm(`Nhập Master Data:\n• ${suppliers.length} nhà cung cấp\n• ${items.length} vật tư\n• ${warehouses.length} kho\n• ${units.length} đơn vị tính\n• ${departments.length} phòng ban\n\nGhi đè dữ liệu hiện tại?`)) return;
+
+      const merged = {
+        suppliers: suppliers.length?suppliers:MASTER.suppliers,
+        items: items.length?items:MASTER.items,
+        warehouses: warehouses.length?warehouses:MASTER.warehouses,
+        units: units.length?units:MASTER.units,
+        departments: departments.length?departments:MASTER.departments
+      };
+      await set(ref(rtdb, MASTER_PATH), merged);
+      alert("✅ Nhập Master Data thành công!");
+      MASTER_EDIT = null;
+    }catch(e){ console.error(e); alert("Lỗi đọc file Excel: "+e.message); }
+    input.value = "";
+  };
+
+  /* ===================== APPROVAL RULES CONFIG ===================== */
+  let RULES_EDIT = null;
+  window.openApprovalCfgModal = function(){
+    if (!isAdmin()){ alert("Chỉ Admin/Phó admin mới được cấu hình bậc thang phê duyệt."); return; }
+    RULES_EDIT = JSON.parse(JSON.stringify(RULES.length?RULES:defaultRules())); renderRuleList(); openModal("modalApprovalCfg");
+  };
+
+  function renderRuleList(){
+    const list = RULES_EDIT || RULES;
+    document.getElementById("ruleList").innerHTML = list.map((r,ri)=>`
+      <div class="appr-row wait" style="align-items:flex-start;flex-direction:column;gap:6px">
+        <div class="row row-r2" style="width:100%">
+          <div class="field"><span class="lbl">Từ giá trị (đ)</span><input type="text" inputmode="numeric" value="${fmtMoney(r.min||0)}" oninput="formatMoneyInputLive(this);updateRule(${ri},'min',this.value)"></div>
+          <div class="field"><span class="lbl">Đến giá trị (đ, để trống = không giới hạn)</span><input type="text" inputmode="numeric" value="${r.max==null?'':fmtMoney(r.max)}" oninput="formatMoneyInputLive(this);updateRule(${ri},'max',this.value)"></div>
+        </div>
+        <div style="width:100%">
+          ${r.levels.map((lv,li)=>`
+            <div class="row row-r2" style="margin-bottom:4px">
+              <div class="field"><span class="lbl">Cấp ${li+1} — Chức danh</span><input value="${lv.title}" oninput="updateLevel(${ri},${li},'title',this.value)"></div>
+              <div class="field"><span class="lbl">Role tương ứng</span><input value="${lv.role}" oninput="updateLevel(${ri},${li},'role',this.value)"></div>
+            </div>`).join("")}
+          <div class="btn-row">
+            <button class="btn btn-new btn-sm" onclick="addLevel(${ri})">➕ Thêm cấp</button>
+            <button class="btn btn-del btn-sm" onclick="removeLevelLast(${ri})">➖ Bớt cấp</button>
+            <button class="btn btn-del btn-sm" onclick="removeRule(${ri})">🗑️ Xóa bậc này</button>
+          </div>
+        </div>
+      </div>`).join("");
+  }
+  window.updateRule = function(ri,field,val){
+    const raw = String(val||"").replace(/[^\d]/g,"");
+    RULES_EDIT[ri][field] = raw===""?null:Number(raw);
+  };
+  window.updateLevel = function(ri,li,field,val){ RULES_EDIT[ri].levels[li][field]=val; };
+  window.addLevel = function(ri){ RULES_EDIT[ri].levels.push({title:"Cấp mới",role:"manager"}); renderRuleList(); };
+  window.removeLevelLast = function(ri){ if (RULES_EDIT[ri].levels.length>1) RULES_EDIT[ri].levels.pop(); renderRuleList(); };
+  window.removeRule = function(ri){ RULES_EDIT.splice(ri,1); renderRuleList(); };
+  window.addRule = function(){ if(!RULES_EDIT) RULES_EDIT=[]; RULES_EDIT.push({id:uid("r"), min:0, max:null, levels:[{title:"Cấp mới",role:"manager"}]}); renderRuleList(); };
+  window.saveApprovalRules = async function(){
+    try{ await set(ref(rtdb, RULES_PATH), RULES_EDIT); alert("✅ Đã lưu cấu hình duyệt"); closeModal("modalApprovalCfg"); }
+    catch(e){ alert("Lỗi lưu: "+e.message); }
+  };
+
+  /* ===================== EXPORT MAIN LIST ===================== */
+  window.exportExcel = async function(){
+    const data = filteredData();
+    if (!data.length){ alert("Không có dữ liệu để xuất"); return; }
+    const wb = new ExcelJS.Workbook();
+    const ws = wb.addWorksheet("Purchasing");
+    const hdr = ["Số PR","Ngày tạo","Người đề xuất","Phòng ban","NCC chính","Tổng giá trị","Trạng thái","Số PO","Ngày PO"];
+    ws.addRow(hdr);
+    ws.getRow(1).eachCell(c=>{ c.font={bold:true,color:{argb:"FFFFFFFF"}}; c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF0D2248"}}; });
+    data.forEach(r=>{
+      ws.addRow([r.prNo, r.prDate, r.requester, r.department, mainSupplierName(r), r.totalValue, (STATUS_META[r.status]||{}).text||r.status, r.poNo||"", r.poDate||""]);
+    });
+    ws.columns.forEach(c=>c.width=18);
+    const buf = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
+    a.download = `Purchasing_${todayStr()}.xlsx`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  };
+
+  /* ===================== INIT ===================== */
+  if (!isAdmin()){
+    const bm = document.getElementById("btnMasterData"); if (bm) bm.style.display = "none";
+    const bc = document.getElementById("btnApprovalCfg"); if (bc) bc.style.display = "none";
+  }
+  renderTabs();
+  renderTable();
+}
+})();
+</script>
+
+</body>
+</html>

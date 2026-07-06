@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "purchasing-4d698"
+  },
+  "targets": {
+    "purchasing-4d698": {
+      "hosting": {
+        "tienphatvt": [
+          "tienphatvt"
+        ],
+        "purchasing-4d698": [
+          "purchasing-4d698"
+        ]
+      }
+    }
+  }
+}
